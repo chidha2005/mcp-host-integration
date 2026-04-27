@@ -1,0 +1,35 @@
+server:
+  port: 8080
+spring:
+  application:
+    name: mcp-host
+  ai:
+    # ---- LLM configuration (Anthropic Claude) ----
+    google:
+      genai:
+        api-key: ${GOOGLE_API_KEY}
+        chat:
+          options:
+            model: gemini-2.0-flash
+            temperature: 0.2
+    # ---- MCP Client connections ----
+    # ONE entry per remote MCP server. Each becomes one MCP client instance,
+    # exactly matching the "MCP Client <-> MCP Server" 1:1 pairs in your diagram.
+    mcp:
+      client:
+        # Use streamable-http, the modern transport (replaces SSE)
+        streamable-http:
+          connections:
+            transaction-server:
+              url: http://localhost:8090
+            filesystem-server:
+              url: http://localhost:8091
+            web-server:
+              url: http://localhost:8092
+        # Auto-register discovered tools as ToolCallbacks for the ChatClient
+        toolcallback:
+          enabled: true
+logging:
+  level:
+    org.springframework.ai: INFO
+    com.dsm.mcp: DEBUG

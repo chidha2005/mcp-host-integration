@@ -1,0 +1,17 @@
+spring:
+  application:
+    name: mcp-filesystem-server
+  ai:
+    mcp:
+      server:
+        name: dsm-filesystem-server
+        version: 1.0.0
+        protocol: STREAMABLE
+server:
+  port: 8091
+# Sandbox root - everything FS tools see is rooted here
+fs:
+  root: ./sandbox
+logging:
+  level:
+    org.springframework.ai.mcp: INFO

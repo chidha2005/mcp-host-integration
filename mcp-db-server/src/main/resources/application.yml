@@ -1,0 +1,28 @@
+# --- HTTP server ---
+server:
+  port: 8090
+spring:
+  application:
+    name: mcp-db-server
+  # --- MCP server identity ---
+  ai:
+    mcp:
+      server:
+        name: dsm-transaction-server
+        version: 1.0.0
+        # STREAMABLE = HTTP transport (preferred over the older SSE)
+        protocol: STREAMABLE
+  # --- Database (H2 in-memory by default; swap to Postgres for the Phase 1 lakehouse) ---
+  datasource:
+    url: jdbc:h2:mem:dsm;DB_CLOSE_DELAY=-1;MODE=PostgreSQL
+    driver-class-name: org.h2.Driver
+    username: sa
+    password:
+  # Auto-run schema.sql + data.sql on startup
+  sql:
+    init:
+      mode: always
+# --- Logging ---
+logging:
+  level:
+    org.springframework.ai.mcp: INFO

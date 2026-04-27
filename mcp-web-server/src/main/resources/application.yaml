@@ -1,0 +1,15 @@
+server:
+  port: 8092
+spring:
+  ai:
+    mcp:
+      server:
+        name: mcp-web-server
+        version: 1.0.0
+        protocol: STREAMABLE
+# Comma-separated list of allowed host suffixes. Add only what you trust.
+web:
+  allowed-hosts: httpbin.org,wikipedia.org,docs.spring.io
+logging:
+  level:
+    org.springframework.ai.mcp: INFO

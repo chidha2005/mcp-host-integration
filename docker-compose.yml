@@ -1,0 +1,86 @@
+services:
+  mcp-db-server:
+    build:
+      context: .
+      dockerfile: mcp-db-server/Dockerfile
+    container_name: mcp-db-server
+    ports:
+      - "8090:8090"
+    networks:
+      - mcp-net
+    healthcheck:
+      test: [ "CMD", "curl", "-fsS", "http://localhost:8090/" ]
+      interval: 10s
+      timeout: 3s
+      retries: 10
+      start_period: 30s
+  mcp-filesystem-server:
+    build:
+      context: .
+      dockerfile: mcp-filesystem-server/Dockerfile
+    container_name: mcp-filesystem-server
+    ports:
+      - "8091:8091"
+    networks:
+      - mcp-net
+    volumes:
+      # Persist the sandbox between container restarts (optional).
+      # Comment out if you want a fresh sandbox every time.
+      - mcp-filesystem-server-sandbox:/app/sandbox
+    healthcheck:
+      test: [ "CMD", "curl", "-fsS", "http://localhost:8091/" ]
+      interval: 10s
+      timeout: 3s
+      retries: 10
+      start_period: 30s
+  mcp-web-server:
+    build:
+      context: .
+      dockerfile: mcp-web-server/Dockerfile
+    container_name: mcp-web-server
+    ports:
+      - "8092:8092"
+    networks:
+      - mcp-net
+    healthcheck:
+      test: [ "CMD", "curl", "-fsS", "http://localhost:8092/" ]
+      interval: 10s
+      timeout: 3s
+      retries: 10
+      start_period: 30s
+  # ---------------------------------------------------------------
+  # MCP Host: connects to all three servers + Anthropic Claude.
+  # Waits for the three servers to be healthy before starting.
+  # ---------------------------------------------------------------
+  mcp-host:
+    build:
+      context: .
+      dockerfile: mcp-host/Dockerfile
+    container_name: mcp-host
+    ports:
+      - "8080:8080"
+    networks:
+      - mcp-net
+    depends_on:
+      mcp-db-server:
+        condition: service_healthy
+      mcp-filesystem-server:
+        condition: service_healthy
+      mcp-web-server:
+        condition: service_healthy
+    environment:
+      # API key for the LLM (must be set in your shell before `docker compose up`)
+      GOOGLE_API_KEY: ${GOOGLE_API_KEY:?Set GOOGLE_API_KEY in your shell first}
+      # ---------- Service discovery override ----------
+      # In the YAML the URLs are http://localhost:8090 etc.
+      # Inside the Docker network, services reach each other by service name.
+      # Spring Boot's relaxed binding lets us override nested config via env vars
+      # using underscores: spring.ai.mcp.client.streamable-http.connections.X.url
+      SPRING_AI_MCP_CLIENT_STREAMABLE_HTTP_CONNECTIONS_TRANSACTION_SERVER_URL: http://db-server:8090
+      SPRING_AI_MCP_CLIENT_STREAMABLE_HTTP_CONNECTIONS_FILESYSTEM_SERVER_URL: http://fs-server:8091
+      SPRING_AI_MCP_CLIENT_STREAMABLE_HTTP_CONNECTIONS_WEB_SERVER_URL: http://web-server:8092
+networks:
+  mcp-net:
+    driver: bridge
+volumes:
+  mcp-filesystem-server-sandbox:

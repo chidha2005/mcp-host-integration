@@ -1,0 +1,35 @@
+-- 30 sample transactions covering all three account types and vendor outcomes.
+-- Skewed toward Spade success (~80%) with MasterCard fallback and a few CFGNative + failures.
+INSERT INTO transactions (transaction_id, account_type, amount, merchant_name, enrichment_vendor, enrichment_status, txn_date) VALUES
+('TXN-00000001', 'CHECKING',     45.20, 'Starbucks',  'SPADE',      'SUCCESS',  CURRENT_DATE - 1),
+('TXN-00000002', 'CHECKING',    120.00, 'Walmart',    'SPADE',      'SUCCESS',  CURRENT_DATE - 1),
+('TXN-00000003', 'CHECKING',     12.50, 'Chipotle',   'SPADE',      'SUCCESS',  CURRENT_DATE - 2),
+('TXN-00000004', 'CHECKING',     78.90, 'Target',     'MASTERCARD', 'FALLBACK', CURRENT_DATE - 2),
+('TXN-00000005', 'CHECKING',     33.10, 'Shell',      'SPADE',      'SUCCESS',  CURRENT_DATE - 3),
+('TXN-00000006', 'CHECKING',    200.00, 'Amazon',     'SPADE',      'SUCCESS',  CURRENT_DATE - 3),
+('TXN-00000007', 'CHECKING',     15.75, 'Starbucks',  'CFGNATIVE',  'FALLBACK', CURRENT_DATE - 4),
+('TXN-00000008', 'CHECKING',     89.99, 'Walmart',    'SPADE',      'SUCCESS',  CURRENT_DATE - 4),
+('TXN-00000009', 'CHECKING',     22.30, 'Chipotle',   'SPADE',      'SUCCESS',  CURRENT_DATE - 5),
+('TXN-00000010', 'CHECKING',     50.00, 'Unknown Co', 'MASTERCARD', 'FAILED',   CURRENT_DATE - 5),
+
+('TXN-00000011', 'SAVINGS',    1500.00, 'Transfer',   'SPADE',      'SUCCESS',  CURRENT_DATE - 1),
+('TXN-00000012', 'SAVINGS',     500.00, 'Transfer',   'SPADE',      'SUCCESS',  CURRENT_DATE - 2),
+('TXN-00000013', 'SAVINGS',    2000.00, 'Transfer',   'SPADE',      'SUCCESS',  CURRENT_DATE - 3),
+('TXN-00000014', 'SAVINGS',     300.00, 'Direct Dep', 'MASTERCARD', 'FALLBACK', CURRENT_DATE - 4),
+('TXN-00000015', 'SAVINGS',    1000.00, 'Transfer',   'SPADE',      'SUCCESS',  CURRENT_DATE - 5),
+('TXN-00000016', 'SAVINGS',     750.00, 'Transfer',   'SPADE',      'SUCCESS',  CURRENT_DATE - 6),
+('TXN-00000017', 'SAVINGS',     250.00, 'Direct Dep', 'CFGNATIVE',  'FALLBACK', CURRENT_DATE - 7),
+('TXN-00000018', 'SAVINGS',     125.00, 'Transfer',   'SPADE',      'SUCCESS',  CURRENT_DATE - 7),
+
+('TXN-00000019', 'CREDIT_CARD',  85.00, 'Amazon',     'SPADE',      'SUCCESS',  CURRENT_DATE - 1),
+('TXN-00000020', 'CREDIT_CARD', 240.50, 'Best Buy',   'SPADE',      'SUCCESS',  CURRENT_DATE - 1),
+('TXN-00000021', 'CREDIT_CARD',  45.00, 'Uber',       'MASTERCARD', 'FALLBACK', CURRENT_DATE - 2),
+('TXN-00000022', 'CREDIT_CARD', 150.00, 'Target',     'SPADE',      'SUCCESS',  CURRENT_DATE - 2),
+('TXN-00000023', 'CREDIT_CARD',  60.25, 'Chipotle',   'SPADE',      'SUCCESS',  CURRENT_DATE - 3),
+('TXN-00000024', 'CREDIT_CARD', 320.00, 'Apple',      'SPADE',      'SUCCESS',  CURRENT_DATE - 3),
+('TXN-00000025', 'CREDIT_CARD',  18.50, 'Lyft',       'CFGNATIVE',  'FALLBACK', CURRENT_DATE - 4),
+('TXN-00000026', 'CREDIT_CARD',  99.99, 'Amazon',     'SPADE',      'SUCCESS',  CURRENT_DATE - 4),
+('TXN-00000027', 'CREDIT_CARD',  42.00, 'Netflix',    'SPADE',      'SUCCESS',  CURRENT_DATE - 5),
+('TXN-00000028', 'CREDIT_CARD',  75.50, 'Mystery LLC','MASTERCARD', 'FAILED',   CURRENT_DATE - 5),
+('TXN-00000029', 'CREDIT_CARD', 200.00, 'Walmart',    'SPADE',      'SUCCESS',  CURRENT_DATE - 6),
+('TXN-00000030', 'CREDIT_CARD',  55.00, 'Starbucks',  'SPADE',      'SUCCESS',  CURRENT_DATE - 7);

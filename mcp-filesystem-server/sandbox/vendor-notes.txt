@@ -1,0 +1,11 @@
+DSM 2.0 - Vendor Primacy Notes (sample reference doc)
+
+1. Spade is the primary enrichment vendor for all account types.
+2. If Spade returns no match within 250ms, fall back to MasterCard.
+3. If MasterCard also fails, use CFGNative as the last resort.
+4. Failures from all three vendors are logged with status=FAILED for DQ review.
+
+Performance targets:
+- P95 enrichment latency: <500ms end-to-end
+- Vendor primacy success rate: >85% for Spade
+- Total enrichment success rate: >97%
